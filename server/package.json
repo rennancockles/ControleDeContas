@@ -1,0 +1,20 @@
+{
+  "name": "controle-de-contas",
+  "version": "1.0.0",
+  "description": "Sistema para controle de contas à pagar",
+  "author": "Rennan Cockles",
+  "main": "server.ts",
+  "license": "GPL-3.0-or-later",
+  "repository": "github:rennancockles/ControleDeContas",
+  "devDependencies": {
+    "@typescript-eslint/eslint-plugin": "^4.12.0",
+    "@typescript-eslint/parser": "^4.12.0",
+    "eslint": "^7.17.0",
+    "eslint-config-standard": "^16.0.2",
+    "eslint-plugin-import": "^2.22.1",
+    "eslint-plugin-node": "^11.1.0",
+    "eslint-plugin-promise": "^4.2.1",
+    "ts-node-dev": "^1.1.1",
+    "typescript": "^4.1.3"
+  }
+}
