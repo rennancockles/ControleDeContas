@@ -10,3 +10,17 @@ Content-Type: application/json
   "password": "123456"
 }
 ###
+
+# @name SignUp
+POST /api/signup HTTP/1.1
+Host: {{host}}
+Content-Type: application/json
+
+{
+  "name": "Rennan",
+  "lastname": "Cockles",
+  "email": "signup_rennan@teste.com",
+  "password": "123456",
+  "passwordConfirmation": "123456"
+}
+###
