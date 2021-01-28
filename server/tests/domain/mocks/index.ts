@@ -1,2 +1,2 @@
-export * from './mock-user'
+export * from './mock-auth'
 export * from './test-helpers'
