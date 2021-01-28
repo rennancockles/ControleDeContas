@@ -1,10 +1,10 @@
 import { IController, IHttpResponse, IValidation } from '@/presentation/protocols'
 import { badRequest, serverError, unauthorized, ok } from '@/presentation/helpers'
-import { ILogin } from '@/domain/usecases'
+import { IAuthentication } from '@/domain/usecases'
 
 export class LoginController implements IController {
   constructor (
-    private readonly login: ILogin,
+    private readonly authentication: IAuthentication,
     private readonly validation: IValidation
   ) {}
 
@@ -16,7 +16,7 @@ export class LoginController implements IController {
         return badRequest(error)
       }
 
-      const authenticationModel = await this.login.execute(request)
+      const authenticationModel = await this.authentication.execute(request)
 
       if (!authenticationModel) {
         return unauthorized()

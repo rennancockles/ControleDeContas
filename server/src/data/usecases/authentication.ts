@@ -1,18 +1,18 @@
-import { ILogin } from '@/domain/usecases'
+import { IAuthentication } from '@/domain/usecases'
 import { IEncrypter, IHashComparer, IGetUserByEmailRepository } from '@/data/protocols'
 
-export class Login implements ILogin {
+export class Authentication implements IAuthentication {
   constructor (
     private readonly getUserByEmailRepository: IGetUserByEmailRepository,
     private readonly hashComparer: IHashComparer,
     private readonly encrypter: IEncrypter
   ) {}
 
-  async execute (loginParams: ILogin.Params): Promise<ILogin.Result> {
-    const user = await this.getUserByEmailRepository.getByEmail(loginParams.email)
+  async execute (authenticationParams: IAuthentication.Params): Promise<IAuthentication.Result> {
+    const user = await this.getUserByEmailRepository.getByEmail(authenticationParams.email)
 
     if (user) {
-      const isValid = await this.hashComparer.compare(loginParams.password, user.password)
+      const isValid = await this.hashComparer.compare(authenticationParams.password, user.password)
 
       if (isValid) {
         const accessToken = await this.encrypter.encrypt(user.id)

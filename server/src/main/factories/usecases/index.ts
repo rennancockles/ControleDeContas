@@ -1,1 +1,1 @@
-export * from './login-factory'
+export * from './authentication-factory'

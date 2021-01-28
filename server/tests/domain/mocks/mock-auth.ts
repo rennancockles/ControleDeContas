@@ -1,4 +1,4 @@
-import { ICreateUser, ILogin } from '@/domain/usecases'
+import { ICreateUser, IAuthentication } from '@/domain/usecases'
 
 import faker from 'faker'
 
@@ -9,7 +9,7 @@ export const mockCreateUserParams = (): ICreateUser.Params => ({
   password: faker.internet.password()
 })
 
-export const mockLoginParams = (): ILogin.Params => ({
+export const mockAuthenticationParams = (): IAuthentication.Params => ({
   email: faker.internet.email(),
   password: faker.internet.password()
 })

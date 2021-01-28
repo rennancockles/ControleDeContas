@@ -1,11 +1,11 @@
 import { IController, IHttpResponse, IValidation } from '@/presentation/protocols'
 import { badRequest, serverError, ok, forbidden } from '@/presentation/helpers'
-import { ILogin, ICreateUser } from '@/domain/usecases'
+import { IAuthentication, ICreateUser } from '@/domain/usecases'
 import { EmailInUseError } from '../errors'
 
 export class SignUpController implements IController {
   constructor (
-    private readonly login: ILogin,
+    private readonly authentication: IAuthentication,
     private readonly createUser: ICreateUser,
     private readonly validation: IValidation
   ) {}
@@ -30,7 +30,7 @@ export class SignUpController implements IController {
         return forbidden(new EmailInUseError())
       }
 
-      const authenticationModel = await this.login.execute({
+      const authenticationModel = await this.authentication.execute({
         email,
         password
       })
