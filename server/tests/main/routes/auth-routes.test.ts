@@ -1,30 +1,69 @@
 import app from '@/main/config/app'
+import { mockCreateUserParams, mockAuthenticationParams } from '@/tests/domain/mocks'
 
 import request from 'supertest'
 
 describe('Auth Routes', () => {
-  // describe('POST /signup', () => {
-  //   test('Should return 200 on signup', async () => {
-  //     await request(app)
-  //       .post('/api/signup')
-  //       .send({
-  //         name: 'Rodrigo',
-  //         email: 'rodrigo.manguinho@gmail.com',
-  //         password: '123',
-  //         passwordConfirmation: '123'
-  //       })
-  //       .expect(200)
-  //     await request(app)
-  //       .post('/api/signup')
-  //       .send({
-  //         name: 'Rodrigo',
-  //         email: 'rodrigo.manguinho@gmail.com',
-  //         password: '123',
-  //         passwordConfirmation: '123'
-  //       })
-  //       .expect(403)
-  //   })
-  // })
+  describe('POST /signup', () => {
+    it('Should return 200 on signup success', async () => {
+      const createUserParams = mockCreateUserParams()
+
+      await request(app)
+        .post('/api/signup')
+        .send({
+          ...createUserParams,
+          passwordConfirmation: createUserParams.password
+        })
+        .expect(200)
+    })
+
+    it('Should return 400 on signup fail with missing parameters', async () => {
+      const createUserParams = mockCreateUserParams()
+
+      await request(app)
+        .post('/api/signup')
+        .send(createUserParams)
+        .expect(400)
+    })
+
+    it('Should return 400 when password and passwordConfirmation do not match', async () => {
+      const createUserParams = mockCreateUserParams()
+
+      await request(app)
+        .post('/api/signup')
+        .send({
+          ...createUserParams,
+          passwordConfirmation: 'any_password'
+        })
+        .expect(400)
+    })
+
+    it('Should return 400 when email is invalid', async () => {
+      const createUserParams = mockCreateUserParams()
+
+      await request(app)
+        .post('/api/signup')
+        .send({
+          ...createUserParams,
+          email: 'random@fake@email.com',
+          passwordConfirmation: createUserParams.password
+        })
+        .expect(400)
+    })
+
+    it('Should return 403 when email already exists', async () => {
+      const createUserParams = mockCreateUserParams()
+
+      await request(app)
+        .post('/api/signup')
+        .send({
+          ...createUserParams,
+          email: 'rennan@teste.com',
+          passwordConfirmation: createUserParams.password
+        })
+        .expect(403)
+    })
+  })
 
   describe('POST /login', () => {
     it('Should return 200 on login success', async () => {
@@ -48,12 +87,11 @@ describe('Auth Routes', () => {
     })
 
     it('Should return 401 on login fail with wrong email', async () => {
+      const authenticationParams = mockAuthenticationParams()
+
       await request(app)
         .post('/api/login')
-        .send({
-          email: 'teste@teste.com',
-          password: '123456'
-        })
+        .send(authenticationParams)
         .expect(401)
     })
   })
