@@ -48,4 +48,13 @@ describe('ErrorLogger Composite', () => {
 
     await expect(promise).rejects.toThrow()
   })
+
+  it('Should pass succesfully in no loggers is passed by param', async () => {
+    const sut = new ErrorLoggerComposite([])
+    const stack = faker.lorem.sentence()
+
+    const promise = sut.logError(stack)
+
+    await expect(promise).resolves.not.toThrow()
+  })
 })
