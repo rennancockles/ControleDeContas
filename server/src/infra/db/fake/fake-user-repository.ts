@@ -39,7 +39,7 @@ export class FakeUserRepository implements IGetUserByEmailRepository, ICreateUse
   }
 
   async checkByEmail (email: string): Promise<ICheckUserByEmailRepository.Result> {
-    const user = this.getByEmail(email)
+    const user = await this.getByEmail(email)
 
     return Boolean(user)
   }
