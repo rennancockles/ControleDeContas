@@ -25,9 +25,10 @@ export class FakeUserRepository implements IGetUserByEmailRepository, ICreateUse
 
   async getByEmail (email: string): Promise<IGetUserByEmailRepository.Result> {
     this.email = email
-    const user = usersMock.find(user => user.email === email)
+    let user = usersMock.find(user => user.email === email)
     if (user) {
-      user.password = await hash(user.password, 12)
+      const hashedPassword = await hash(user.password, 12)
+      user = { ...user, password: hashedPassword }
     }
     return user
   }
