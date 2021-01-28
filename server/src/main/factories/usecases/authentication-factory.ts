@@ -5,9 +5,7 @@ import { Authentication } from '@/data/usecases'
 import { IAuthentication } from '@/domain/usecases'
 
 export const makeAuthenticationUsecase = (): IAuthentication => {
-  const salt = 12
-
-  const bcryptAdapter = new BcryptAdapter(salt)
+  const bcryptAdapter = new BcryptAdapter(env.bcryptSalt as number)
   const jwtAdapter = new JwtAdapter(env.jwtSecret, '24h')
   const fakeUserRepository = new FakeUserRepository()
 
