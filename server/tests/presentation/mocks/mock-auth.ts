@@ -1,4 +1,4 @@
-import { ILogin } from '@/domain/usecases'
+import { ICreateUser, ILogin } from '@/domain/usecases'
 
 import faker from 'faker'
 
@@ -10,6 +10,16 @@ export class LoginSpy implements ILogin {
   }
 
   async execute (params: ILogin.Params): Promise<ILogin.Result> {
+    this.params = params
+    return this.result
+  }
+}
+
+export class CreateUserSpy implements ICreateUser {
+  params: ICreateUser.Params
+  result = true
+
+  async execute (params: ICreateUser.Params): Promise<ICreateUser.Result> {
     this.params = params
     return this.result
   }
