@@ -1,0 +1,43 @@
+@host = localhost:5050
+@resource = /graphql
+
+# @name Login
+POST {{resource}} HTTP/1.1
+Host: {{host}}
+Content-Type: application/json
+X-REQUEST-TYPE: GraphQL
+
+query ($email: String!, $password: String!) {
+  login(email: $email, password: $password) {
+    accessToken
+    name
+  }
+}
+
+{
+  "email": "rennan@teste.com",
+  "password": "123456"
+}
+###
+
+# @name SignUp
+POST {{resource}} HTTP/1.1
+Host: {{host}}
+Content-Type: application/json
+X-REQUEST-TYPE: GraphQL
+
+mutation ($name: String!, $lastname: String!, $email: String!, $password: String!, $passwordConfirmation: String!) {
+  signUp(name: $name, lastname: $lastname, email: $email, password: $password, passwordConfirmation: $passwordConfirmation) {
+    accessToken
+    name
+  }
+}
+
+{
+  "name": "Rennan",
+  "lastname": "Cockles",
+  "email": "signup_rennan@teste.com",
+  "password": "123456",
+  "passwordConfirmation": "123456"
+}
+###
