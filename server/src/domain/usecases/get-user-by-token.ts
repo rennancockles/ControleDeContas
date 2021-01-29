@@ -1,9 +1,10 @@
+import { UserModel } from '@/domain/models'
+
 export interface IGetUserByToken {
-  execute: (token: string) => Promise<IGetUserByToken.Result>
+  execute: (accessToken: IGetUserByToken.Params) => Promise<IGetUserByToken.Result>
 }
 
 export namespace IGetUserByToken {
-  export type Result = {
-    id: string
-  }
+  export type Params = string
+  export type Result = UserModel
 }

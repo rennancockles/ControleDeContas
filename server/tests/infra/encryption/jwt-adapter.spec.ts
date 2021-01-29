@@ -8,8 +8,8 @@ jest.mock('jsonwebtoken', () => ({
     return 'any_token'
   },
 
-  async verify (): Promise<string> {
-    return 'any_value'
+  verify (): object {
+    return { id: 'any_value' }
   }
 }))
 
