@@ -1,4 +1,4 @@
-import { ICheckUserByEmailRepository, ICreateUserRepository, IGetUserByEmailRepository } from '@/data/protocols'
+import { ICheckUserByEmailRepository, ICreateUserRepository, IGetUserByEmailRepository, IGetUserByIdRepository } from '@/data/protocols'
 
 import faker from 'faker'
 
@@ -6,12 +6,30 @@ export class GetUserByEmailRepositorySpy implements IGetUserByEmailRepository {
   email: string
   result = {
     id: faker.random.uuid(),
-    name: faker.name.findName(),
+    name: faker.name.firstName(),
+    lastname: faker.name.lastName(),
+    email: faker.internet.email(),
     password: faker.internet.password()
   }
 
   async getByEmail (email: string): Promise<IGetUserByEmailRepository.Result> {
     this.email = email
+    return this.result
+  }
+}
+
+export class GetUserByIdRepositorySpy implements IGetUserByIdRepository {
+  id: string
+  result = {
+    id: faker.random.uuid(),
+    name: faker.name.firstName(),
+    lastname: faker.name.lastName(),
+    email: faker.internet.email(),
+    password: faker.internet.password()
+  }
+
+  async getById (id: string): Promise<IGetUserByIdRepository.Result> {
+    this.id = id
     return this.result
   }
 }

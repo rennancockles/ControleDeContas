@@ -13,6 +13,7 @@ export class JwtAdapter implements IEncrypter, IDecrypter {
   }
 
   async decrypt (ciphertext: string): Promise<string> {
-    return jwt.verify(ciphertext, this.secret) as any
+    const { id } = jwt.verify(ciphertext, this.secret) as any
+    return id
   }
 }
