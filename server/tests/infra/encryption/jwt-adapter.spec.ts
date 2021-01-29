@@ -14,7 +14,7 @@ jest.mock('jsonwebtoken', () => ({
 }))
 
 const secret = 'secret'
-const expirationTime = '24h'
+const expirationTime = '1h'
 const makeSut = (): JwtAdapter => {
   return new JwtAdapter(secret, expirationTime)
 }

@@ -5,7 +5,7 @@ import { JwtAdapter } from '@/infra/encryption'
 import env from '@/main/config/env'
 
 export const makeGetUserByTokenUsecase = (): IGetUserByToken => {
-  const decrypter = new JwtAdapter(env.jwtSecret, '24h')
+  const decrypter = new JwtAdapter(env.jwtSecret, env.jwtExpirationTime)
   const fakeUserRepository = new FakeUserRepository()
 
   return new GetUserByToken(decrypter, fakeUserRepository)
