@@ -1,4 +1,4 @@
-import { ICreateUser, IAuthentication } from '@/domain/usecases'
+import { ICreateUser, IAuthentication, IGetUserByToken } from '@/domain/usecases'
 
 import faker from 'faker'
 
@@ -21,6 +21,22 @@ export class CreateUserSpy implements ICreateUser {
 
   async execute (params: ICreateUser.Params): Promise<ICreateUser.Result> {
     this.params = params
+    return this.result
+  }
+}
+
+export class GetUserByTokenSpy implements IGetUserByToken {
+  accessToken: IGetUserByToken.Params
+  result = {
+    id: faker.random.uuid(),
+    name: faker.name.firstName(),
+    lastname: faker.name.lastName(),
+    email: faker.internet.email(),
+    password: faker.random.word()
+  }
+
+  async execute (accessToken: IGetUserByToken.Params): Promise<IGetUserByToken.Result> {
+    this.accessToken = accessToken
     return this.result
   }
 }
