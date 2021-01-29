@@ -40,6 +40,28 @@ describe('FakeUser Repository', () => {
     })
   })
 
+  describe('getById()', () => {
+    it('Should return an user on success', async () => {
+      const sut = makeSut()
+
+      const account = await sut.getById('1')
+
+      expect(account).toBeTruthy()
+      expect(account.id).toBe('1')
+      expect(account.name).toBe('Rennan')
+      expect(account.email).toBe('rennan@teste.com')
+      expect(account.password).toBeTruthy()
+    })
+
+    it('Should return null if getById fails', async () => {
+      const sut = makeSut()
+
+      const account = await sut.getById(faker.random.uuid())
+
+      expect(account).toBeFalsy()
+    })
+  })
+
   describe('checkByEmail()', () => {
     test('Should return true if email is valid', async () => {
       const sut = makeSut()

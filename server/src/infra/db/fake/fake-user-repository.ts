@@ -1,4 +1,4 @@
-import { ICheckUserByEmailRepository, ICreateUserRepository, IGetUserByEmailRepository } from '@/data/protocols'
+import { ICheckUserByEmailRepository, ICreateUserRepository, IGetUserByEmailRepository, IGetUserByIdRepository } from '@/data/protocols'
 
 import { hash } from 'bcrypt'
 import faker from 'faker'
@@ -20,12 +20,18 @@ const usersMock = [
   }
 ]
 
-export class FakeUserRepository implements IGetUserByEmailRepository, ICreateUserRepository, ICheckUserByEmailRepository {
-  email: string
-
+export class FakeUserRepository implements IGetUserByEmailRepository, ICreateUserRepository, ICheckUserByEmailRepository, IGetUserByIdRepository {
   async getByEmail (email: string): Promise<IGetUserByEmailRepository.Result> {
-    this.email = email
     let user = usersMock.find(user => user.email === email)
+    if (user) {
+      const hashedPassword = await hash(user.password, 12)
+      user = { ...user, password: hashedPassword }
+    }
+    return user
+  }
+
+  async getById (id: string): Promise<IGetUserByIdRepository.Result> {
+    let user = usersMock.find(user => user.id === id)
     if (user) {
       const hashedPassword = await hash(user.password, 12)
       user = { ...user, password: hashedPassword }
