@@ -1,1 +1,5 @@
-export * from './auth-directive'
+import { AuthDirective } from './auth-directive'
+
+export default {
+  auth: AuthDirective
+}
