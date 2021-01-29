@@ -110,6 +110,8 @@ describe('SignUp Controller', () => {
       const httpResponse = await sut.handle(mockRequest())
 
       expect(httpResponse).toEqual(ok(authenticationSpy.result))
+      expect(httpResponse.body.accessToken).toBeTruthy()
+      expect(httpResponse.body.name).toBe(authenticationSpy.result.name)
     })
 
     it('Should return 400 if Validation returns an error', async () => {
