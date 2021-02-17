@@ -39,5 +39,5 @@ export default (app: Express): void => {
     }]
   })
 
-  server.applyMiddleware({ app })
+  server.applyMiddleware({ app, path: '/graph' })
 }
