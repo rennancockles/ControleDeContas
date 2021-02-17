@@ -107,4 +107,38 @@ describe('Auth GraphQL', () => {
       expect(res.errors[0].message).toBe('Invalid param: email')
     })
   })
+
+  describe('Recover Query', () => {
+    const recoverQuery = gql`
+      query recover ($email: String!) {
+        recover (email: $email) 
+      }
+    `
+
+    it('Should work on valid email', async () => {
+      const { query } = createTestClient({ apolloServer })
+
+      const res: any = await query(recoverQuery, {
+        variables: {
+          email: 'rennan@teste.com'
+        }
+      })
+
+      expect(res.data.recover).toBeNull()
+      expect(res.errors).toBeFalsy()
+    })
+
+    it('Should return UserInputError on invalid email', async () => {
+      const { query } = createTestClient({ apolloServer })
+
+      const res: any = await query(recoverQuery, {
+        variables: {
+          email: 'ren@@nan@teste.com'
+        }
+      })
+
+      expect(res.data.recover).toBeNull()
+      expect(res.errors[0].message).toBe('Invalid param: email')
+    })
+  })
 })

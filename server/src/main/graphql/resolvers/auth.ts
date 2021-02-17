@@ -1,9 +1,10 @@
 import { adaptResolver } from '@/main/adapters'
-import { makeLoginController, makeSignUpController } from '@/main/factories'
+import { makeLoginController, makeRecoverPasswordController, makeSignUpController } from '@/main/factories'
 
 export default {
   Query: {
-    login: async (parent: any, args: any) => adaptResolver(makeLoginController(), args)
+    login: async (parent: any, args: any) => adaptResolver(makeLoginController(), args),
+    recover: async (parent: any, args: any) => adaptResolver(makeRecoverPasswordController(), args)
   },
 
   Mutation: {

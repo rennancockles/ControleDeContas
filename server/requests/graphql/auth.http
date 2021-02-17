@@ -41,3 +41,18 @@ mutation ($name: String!, $lastname: String!, $email: String!, $password: String
   "passwordConfirmation": "123456"
 }
 ###
+
+# @name Recover
+POST {{resource}} HTTP/1.1
+Host: {{host}}
+Content-Type: application/json
+X-REQUEST-TYPE: GraphQL
+
+query ($email: String!) {
+  recover(email: $email) 
+}
+
+{
+  "email": "rennan@teste.com"
+}
+###
