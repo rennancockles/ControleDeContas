@@ -95,4 +95,36 @@ describe('Auth Routes', () => {
         .expect(401)
     })
   })
+
+  describe('POST /recover', () => {
+    it('Should return 204 on recover success', async () => {
+      await request(app)
+        .post('/api/recover')
+        .send({
+          email: 'rennan@teste.com'
+        })
+        .expect(204)
+    })
+
+    it('Should return 400 on missing email', async () => {
+      await request(app)
+        .post('/api/recover')
+        .send({})
+        .expect(400)
+    })
+
+    it('Should return 400 on empty email', async () => {
+      await request(app)
+        .post('/api/recover')
+        .send({ email: '' })
+        .expect(400)
+    })
+
+    it('Should return 400 on invalid email', async () => {
+      await request(app)
+        .post('/api/recover')
+        .send({ email: 'invalid@email@test.com' })
+        .expect(400)
+    })
+  })
 })
