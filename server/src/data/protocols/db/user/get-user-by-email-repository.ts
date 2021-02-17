@@ -1,9 +1,9 @@
-import { UserModel } from '@/domain/models'
+import { User } from '@/data/entities'
 
 export interface IGetUserByEmailRepository {
   getByEmail: (email: string) => Promise<IGetUserByEmailRepository.Result>
 }
 
 export namespace IGetUserByEmailRepository {
-  export type Result = UserModel
+  export type Result = User
 }
