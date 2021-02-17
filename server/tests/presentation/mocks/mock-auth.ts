@@ -1,4 +1,4 @@
-import { ICreateUser, IAuthentication, IGetUserByToken } from '@/domain/usecases'
+import { ICreateUser, IAuthentication, IGetUserByToken, ISendRecoverEmail } from '@/domain/usecases'
 
 import faker from 'faker'
 
@@ -38,5 +38,13 @@ export class GetUserByTokenSpy implements IGetUserByToken {
   async execute (accessToken: IGetUserByToken.Params): Promise<IGetUserByToken.Result> {
     this.accessToken = accessToken
     return this.result
+  }
+}
+
+export class SendRecoverEmailSpy implements ISendRecoverEmail {
+  email: ISendRecoverEmail.Params
+
+  async execute (email: ISendRecoverEmail.Params): Promise<ISendRecoverEmail.Result> {
+    this.email = email
   }
 }
