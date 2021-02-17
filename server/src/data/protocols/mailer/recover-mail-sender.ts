@@ -1,3 +1,3 @@
 export interface IRecoverMailSender {
-  send: (email: string) => Promise<void>
+  sendRecoverEmail: (name: string, email: string, recoverUrl: string) => Promise<void>
 }
