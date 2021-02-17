@@ -24,3 +24,13 @@ Content-Type: application/json
   "passwordConfirmation": "123456"
 }
 ###
+
+# @name RecoverEmail
+POST /api/recover HTTP/1.1
+Host: {{host}}
+Content-Type: application/json
+
+{
+  "email": "rennan@teste.com"
+}
+###
