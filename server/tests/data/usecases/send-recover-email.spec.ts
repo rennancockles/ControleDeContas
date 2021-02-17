@@ -1,5 +1,5 @@
 import { SendRecoverEmail } from '@/data/usecases'
-import { CheckUserByEmailRepositorySpy, RecoverMailSenderSpy } from '@/tests/data/mocks'
+import { EncrypterSpy, GetUserByEmailRepositorySpy, RecoverMailSenderSpy } from '@/tests/data/mocks'
 import { throwError } from '@/tests/domain/mocks'
 
 import faker from 'faker'
@@ -7,20 +7,24 @@ import faker from 'faker'
 type SutTypes = {
   sut: SendRecoverEmail
   recoverMailSenderSpy: RecoverMailSenderSpy
-  checkUserByEmailRepositorySpy: CheckUserByEmailRepositorySpy
+  getUserByEmailRepositorySpy: GetUserByEmailRepositorySpy
+  encrypterSpy: EncrypterSpy
 }
 
 const makeSut = (): SutTypes => {
   const recoverMailSenderSpy = new RecoverMailSenderSpy()
-  const checkUserByEmailRepositorySpy = new CheckUserByEmailRepositorySpy()
+  const getUserByEmailRepositorySpy = new GetUserByEmailRepositorySpy()
+  const encrypterSpy = new EncrypterSpy()
   const sut = new SendRecoverEmail(
     recoverMailSenderSpy,
-    checkUserByEmailRepositorySpy
+    getUserByEmailRepositorySpy,
+    encrypterSpy
   )
   return {
     sut,
     recoverMailSenderSpy,
-    checkUserByEmailRepositorySpy
+    getUserByEmailRepositorySpy,
+    encrypterSpy
   }
 }
 
@@ -31,18 +35,38 @@ describe('SendRecoverEmail UseCase', () => {
     email = faker.internet.email()
   })
 
-  describe('CheckUserByEmail Repository', () => {
-    it('Should call CheckUserByEmail with correct email', async () => {
-      const { sut, checkUserByEmailRepositorySpy } = makeSut()
+  describe('GetUserByEmail Repository', () => {
+    it('Should call GetUserByEmailRepository with correct email', async () => {
+      const { sut, getUserByEmailRepositorySpy } = makeSut()
 
       await sut.execute(email)
 
-      expect(checkUserByEmailRepositorySpy.email).toBe(email)
+      expect(getUserByEmailRepositorySpy.email).toBe(email)
     })
 
-    it('Should throw if CheckUserByEmail throws', async () => {
-      const { sut, checkUserByEmailRepositorySpy } = makeSut()
-      jest.spyOn(checkUserByEmailRepositorySpy, 'checkByEmail').mockImplementationOnce(throwError)
+    it('Should throw if GetUserByEmailRepository throws', async () => {
+      const { sut, getUserByEmailRepositorySpy } = makeSut()
+      jest.spyOn(getUserByEmailRepositorySpy, 'getByEmail').mockImplementationOnce(throwError)
+
+      const promise = sut.execute(email)
+
+      await expect(promise).rejects.toThrow()
+    })
+
+    it('Should pass if GetUserByEmailRepository returns null', async () => {
+      const { sut, getUserByEmailRepositorySpy } = makeSut()
+      getUserByEmailRepositorySpy.result = null
+
+      const promise = sut.execute(email)
+
+      await expect(promise).resolves.not.toThrow()
+    })
+  })
+
+  describe('Encrypter', () => {
+    it('Should throw if Encrypter throws', async () => {
+      const { sut, encrypterSpy } = makeSut()
+      jest.spyOn(encrypterSpy, 'encrypt').mockImplementationOnce(throwError)
 
       const promise = sut.execute(email)
 
@@ -52,8 +76,8 @@ describe('SendRecoverEmail UseCase', () => {
 
   describe('RecoverMailSender', () => {
     it('Should not call RecoverMailSender if email does not exists', async () => {
-      const { sut, recoverMailSenderSpy, checkUserByEmailRepositorySpy } = makeSut()
-      checkUserByEmailRepositorySpy.result = false
+      const { sut, recoverMailSenderSpy, getUserByEmailRepositorySpy } = makeSut()
+      getUserByEmailRepositorySpy.result = null
 
       await sut.execute(email)
 
@@ -61,27 +85,30 @@ describe('SendRecoverEmail UseCase', () => {
     })
 
     it('Should call RecoverMailSender if email exists', async () => {
-      const { sut, recoverMailSenderSpy, checkUserByEmailRepositorySpy } = makeSut()
-      checkUserByEmailRepositorySpy.result = true
+      const { sut, recoverMailSenderSpy } = makeSut()
 
       await sut.execute(email)
 
       expect(recoverMailSenderSpy.executionAmount).toBe(1)
     })
 
-    it('Should call RecoverMailSender with correct email', async () => {
-      const { sut, recoverMailSenderSpy, checkUserByEmailRepositorySpy } = makeSut()
-      checkUserByEmailRepositorySpy.result = true
+    it('Should call RecoverMailSender with correct params', async () => {
+      const { sut, recoverMailSenderSpy, getUserByEmailRepositorySpy, encrypterSpy } = makeSut()
 
       await sut.execute(email)
 
-      expect(recoverMailSenderSpy.email).toBe(email)
+      const name = `${getUserByEmailRepositorySpy.result.name.charAt(0).toUpperCase()}${getUserByEmailRepositorySpy.result.name.toLowerCase().slice(1)}`
+      const lastname = `${getUserByEmailRepositorySpy.result.lastname.charAt(0).toUpperCase()}${getUserByEmailRepositorySpy.result.lastname.toLowerCase().slice(1)}`
+      const fullName = `${name} ${lastname}`
+
+      expect(recoverMailSenderSpy.email).toBe(getUserByEmailRepositorySpy.result.email)
+      expect(recoverMailSenderSpy.name).toBe(fullName)
+      expect(recoverMailSenderSpy.recoverToken).toBe(encrypterSpy.ciphertext)
     })
 
     it('Should throw if RecoverMailSender throws', async () => {
-      const { sut, recoverMailSenderSpy, checkUserByEmailRepositorySpy } = makeSut()
-      checkUserByEmailRepositorySpy.result = true
-      jest.spyOn(recoverMailSenderSpy, 'send').mockImplementationOnce(throwError)
+      const { sut, recoverMailSenderSpy } = makeSut()
+      jest.spyOn(recoverMailSenderSpy, 'sendRecoverEmail').mockImplementationOnce(throwError)
 
       const promise = sut.execute(email)
 
