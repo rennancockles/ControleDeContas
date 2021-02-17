@@ -2,12 +2,14 @@ import {
   authSchema,
   errorSchema,
   loginParamsSchema,
-  signUpParamsSchema
+  signUpParamsSchema,
+  recoverParamsSchema
 } from './schemas/'
 
 export default {
   auth: authSchema,
   error: errorSchema,
   loginParams: loginParamsSchema,
-  signUpParams: signUpParamsSchema
+  signUpParams: signUpParamsSchema,
+  recoverParams: recoverParamsSchema
 }
