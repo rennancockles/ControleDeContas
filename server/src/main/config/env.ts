@@ -1,6 +1,9 @@
 export default {
   port: process.env.PORT || 5050,
+  client_url: process.env.CLIENT_URL || 'http://localhost:8080',
+
   jwtSecret: process.env.JWT_SECRET || 'tj67O==5H',
+  jwtExpirationTime: process.env.JWT_EXPIRATION || '1h',
   bcryptSalt: process.env.BCRYPT_SALT || 12,
 
   emailFrom: process.env.EMAIL_FROM,

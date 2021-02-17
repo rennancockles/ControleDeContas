@@ -6,8 +6,8 @@ export const adaptRoute = (controller: IController) => {
   return async (req: Request, res: Response) => {
     const request = {
       ...(req.body || {}),
-      ...(req.params || {})
-      // accountId: req.accountId
+      ...(req.params || {}),
+      userId: req.userId
     }
 
     const httpResponse = await controller.handle(request)
@@ -21,12 +21,3 @@ export const adaptRoute = (controller: IController) => {
     }
   }
 }
-
-// export const adaptRoute = (controller: IController) => {
-//   return async (req: Request, res: Response) => {
-//     console.log(req.body)
-//     console.log(req.params)
-//     const httpResponse = await controller.handle(req)
-//     res.status(httpResponse.statusCode).json(httpResponse.body)
-//   }
-// }
