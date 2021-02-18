@@ -1,16 +1,23 @@
-export default {
-  port: process.env.PORT || 5050,
-  client_url: process.env.CLIENT_URL || 'http://localhost:8080',
+import dotenv from 'dotenv'
 
-  jwtSecret: process.env.JWT_SECRET || 'tj67O==5H',
-  jwtExpirationTime: process.env.JWT_EXPIRATION || '1h',
-  bcryptSalt: process.env.BCRYPT_SALT || 12,
+dotenv.config({
+  path: process.env.NODE_ENV.trim() === 'dev' ? '.env.dev' : '.env'
+})
+
+export default {
+  port: parseInt(process.env.PORT),
+  client_url: process.env.CLIENT_URL,
+
+  jwtSecret: process.env.JWT_SECRET,
+  jwtExpirationTime: process.env.JWT_EXPIRATION,
+
+  bcryptSalt: parseInt(process.env.BCRYPT_SALT),
 
   emailFrom: process.env.EMAIL_FROM,
   emailLogin: process.env.EMAIL_LOGIN,
   emailPassword: process.env.EMAIL_PASSWORD,
 
-  cryptoAlg: process.env.CRYPTO_ALG || 'aes-256-cbc',
-  cryptoKey: process.env.CRYPTO_KEY || '2e0fa95d12945fa68b9f6a5292432f835ab0a11f2639b017928b36ac23641b96',
-  cryptoIV: process.env.CRYPTO_IV || 'f9cd729345874571529ed4c44e7dbd61'
+  cryptoAlg: process.env.CRYPTO_ALG,
+  cryptoKey: process.env.CRYPTO_KEY,
+  cryptoIV: process.env.CRYPTO_IV
 }
